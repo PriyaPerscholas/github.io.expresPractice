@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
-
 const fs = require('fs')
 const res = require('express/lib/response')
 const req = require('express/lib/request')
-//template one
+
+//const { allowedNodeEnvironmentFlags } = require('process');
+
 app.engine('hypatia', (filePath, options, callback) => {
+
        fs.readFile(filePath, (err, content) => {
               if (err) return callback(err)
 
@@ -18,21 +20,6 @@ app.engine('hypatia', (filePath, options, callback) => {
 })
 app.set('views', './views') // specify the views directory
 app.set('view engine', 'hypatia') // register the hypatia view engine
-
-//template two
-app.engine('new', (filePath, options, callback) => {
-       fs.readFile(filePath, (err, content) => {
-              if (err) return callback(err)
-
-              const rendered = content.toString()
-                     .replace('#title#', '<title>' + options.title + '</title>')
-                     .replace('#message#', '<h2>' + options.message + '</h2>')
-                     .replace('#content#', '<p>' + options.content + '</p>')
-              return callback(null, rendered)
-       })
-})
-app.set('views', './views') // specify the views directory
-app.set('view engine', 'new') // register the hypatia view engine
 
 app.get('/', function (req, res) {
        res.send('<h1>Hello ALL!</h1>');
@@ -66,12 +53,11 @@ app.get('/loops', function (req, res) {
 });
 
 app.get('/about-JS', (req, res) => {
-       res.render('template.hypatia', { title: 'Hey', message: 'Javascript!', content: 'Most powerful scripting language' })
+       res.render('template1', { title: 'Hey', message: 'Javascript!', content: 'Most powerful scripting language.JavaScript, often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS. Over 97% of websites use JavaScript on the client side for web page behavior, often incorporating third-party libraries' })
 })
 app.get('/about-HTML', (req, res) => {
-       res.render('template.new', { title: 'Hey', message: 'HTML', content: 'Backbone of Webpage' })
+       res.render('template2', { title: 'Hey', message: 'HTML', content: 'Backbone of Webpage.HTML (Hypertext Markup Language) is the code that is used to structure a web page and its content. For example, content could be structured within a set of paragraphs, a list of bulleted points, or using images and data tables.' })
 })
-
 
 app.listen(3000, function () {
        console.log('Listening on port 3000');
